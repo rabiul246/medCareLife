@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Dashboard - View Prescriptions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="prescriptions.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
+    <div id="userInfo" class="text-lg font-semibold"></div>
+    <button onclick="logout()" class="bg-[#4ca1af] px-4 py-2 rounded hover:bg-[#3a94a1]">Logout</button>
+  </nav>
+
+  <!-- Prescriptions List -->
+  <main class="p-6">
+    <h2 class="text-xl mb-4">Your Prescriptions</h2>
+    <div id="prescriptionsContainer"></div>
+  </main>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (!currentUser || currentUser.role !== "patient") {
+      window.location.href = "../login.html";
+    } else {
+      document.getElementById("userInfo").textContent = `Welcome, ${currentUser.name}`;
+      displayPatientPrescriptions(); // Load prescriptions on page load
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "../login.html";
+    }
+  </script>
+</body>
+</html>

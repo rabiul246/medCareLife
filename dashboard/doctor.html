@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Doctor Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .main-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      grid-template-rows: 1fr 150px;
+      grid-template-areas:
+        "advertisement content"
+        "bottom bottom";
+      height: calc(100vh - 64px); /* Full height minus navbar */
+    }
+    .advertisement {
+      grid-area: advertisement;
+    }
+    .content {
+      grid-area: content;
+    }
+    .bottom {
+      grid-area: bottom;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
+    <div id="userInfo" class="text-lg font-semibold"></div>
+    <button onclick="logout()" class="bg-[#4ca1af] px-4 py-2 rounded hover:bg-[#3a94a1]">Logout</button>
+  </nav>
+
+  <!-- Main Layout -->
+  <div class="main-layout">
+    
+    <!-- Left Advertisement Panel -->
+    <aside class="advertisement bg-white p-4 shadow overflow-y-auto">
+      <img id="companyImage" src="" alt="Medicine" class="w-full h-40 object-cover mb-2 rounded" />
+      <h2 id="companyName" class="text-center font-bold text-[#2c3e50] text-sm"></h2>
+    </aside>
+
+    <!-- Content Section -->
+    <main class="content p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div id="viewAppointments" class="bg-white p-6 rounded shadow text-[#2c3e50] cursor-pointer hover:bg-gray-100">🩺 View Appointments</div>
+      <div id="writePrescription" class="bg-white p-6 rounded shadow text-[#2c3e50] cursor-pointer hover:bg-gray-100">💊 Write Prescriptions</div>
+      <div id="viewHistory" class="bg-white p-6 rounded shadow text-[#2c3e50] cursor-pointer hover:bg-gray-100">📄 View Patient History</div>
+    </main>
+
+    <!-- Bottom Details Section -->
+    <footer class="bottom bg-white p-4 shadow overflow-y-auto">
+      <h3 class="font-semibold text-[#2c3e50]">Details</h3>
+      <p id="companyDetails" class="text-gray-700 text-sm mt-2"></p>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Auth
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (!currentUser || currentUser.role !== "doctor") {
+      window.location.href = "../login.html";
+    } else {
+      document.getElementById("userInfo").textContent = `Welcome, ${currentUser.name} (Doctor)`;
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "../login.html";
+    }
+
+    // Navigation
+    document.getElementById("viewAppointments").addEventListener("click", () => {
+      window.location.href = "appointments.html";
+    });
+
+    document.getElementById("writePrescription").addEventListener("click", () => {
+      window.location.href = "prescribe.html";
+    });
+
+    document.getElementById("viewHistory").addEventListener("click", () => {
+      window.location.href = "view_patient_history.html";
+    });
+  </script>
+
+  <!-- Advertisement Script -->
+  <script src="../js/advertisement.js"></script>
+</body>
+</html>

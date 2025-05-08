@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - Medcare Life</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+  <nav class="bg-[#2c3e50] text-white p-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="text-lg font-semibold">Medcare Life</div>
+      <a href="index.html" class="px-4 py-2 bg-[#4ca1af] rounded hover:bg-[#3a94a1]">Home</a>
+    </div>
+  </nav>
+
+  <main class="flex-grow flex justify-center items-center">
+    <form id="registerForm" class="bg-white p-8 rounded shadow-md w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-6 text-center text-[#2c3e50]">Register</h2>
+      <input type="text" placeholder="Name" name="name" required class="mb-4 w-full p-2 border rounded" />
+      <input type="email" placeholder="Email" name="email" required class="mb-4 w-full p-2 border rounded" />
+      <input type="password" placeholder="Password" name="password" required class="mb-4 w-full p-2 border rounded" />
+      <select name="role" required class="mb-4 w-full p-2 border rounded">
+        <option value="" disabled selected>Select Role</option>
+        <option value="doctor">Doctor</option>
+        <option value="patient">Patient</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button type="submit" class="w-full bg-[#4ca1af] text-white py-2 rounded hover:bg-[#3a94a1]">Register</button>
+      <p class="mt-4 text-sm text-center">Already have an account? <a href="login.html" class="text-[#4ca1af] underline">Login</a></p>
+    </form>
+  </main>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

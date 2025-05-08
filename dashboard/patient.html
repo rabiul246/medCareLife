@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
+    <div id="userInfo" class="text-lg font-semibold"></div>
+    <button onclick="logout()" class="bg-[#4ca1af] px-4 py-2 rounded hover:bg-[#3a94a1]">Logout</button>
+  </nav>
+
+  <main class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="bg-white p-6 rounded shadow text-[#2c3e50]">📅 Book Appointment</div>
+    <div class="bg-white p-6 rounded shadow text-[#2c3e50]">📜 View Prescriptions</div>
+    <div class="bg-white p-6 rounded shadow text-[#2c3e50]">👨‍⚕️ Search Doctors</div>
+  </main>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (!currentUser || currentUser.role !== "patient") {
+      window.location.href = "../login.html";
+    } else {
+      document.getElementById("userInfo").textContent = `Welcome, ${currentUser.name} (Patient)`;
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "../login.html";
+    }
+  </script>
+</body>
+</html>

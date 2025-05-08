@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>View Patient History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
+    <div class="text-lg font-semibold">View Patient History</div>
+    <div class="flex space-x-4">
+      <a href="doctor.html" class="bg-gray-300 text-[#2c3e50] px-4 py-2 rounded hover:bg-gray-400">Back</a>
+      <button onclick="logout()" class="bg-[#4ca1af] px-4 py-2 rounded hover:bg-[#3a94a1]">Logout</button>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="flex flex-col items-center justify-start p-6 flex-1">
+    <!-- Patient Email Section -->
+    <div class="w-full max-w-xl mb-6">
+      <input id="patientEmail" type="email" placeholder="Enter Patient Email"
+        class="w-full p-2 border border-gray-300 rounded mb-4" />
+      <button id="searchBtn"
+        class="bg-[#4ca1af] text-white px-4 py-2 rounded hover:bg-[#3a94a1] w-full">Search</button>
+    </div>
+
+    <!-- Patient History Table -->
+    <div id="historyTable" class="w-full max-w-4xl bg-white shadow-md rounded-lg border border-gray-300 hidden">
+      <h2 class="font-semibold text-[#2c3e50] text-center text-xl py-4">Patient History</h2>
+      <table class="w-full table-auto mb-4">
+        <thead>
+          <tr>
+            <th class="border p-2 text-left">Disease</th>
+            <th class="border p-2 text-left">Doctor</th>
+            <th class="border p-2 text-left">Medicine</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/patientHistory.js"></script>
+  <script>
+    // Logout function
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "../login.html";
+    }
+
+    // Center table logic (unchanged JS structure)
+    document.getElementById("searchBtn").addEventListener("click", function () {
+      const email = document.getElementById("patientEmail").value.trim().toLowerCase();
+      const history = getPatientHistoryByEmail(email); // Assuming this comes from patientHistory.js
+      const tbody = document.getElementById("historyBody");
+      const table = document.getElementById("historyTable");
+
+      tbody.innerHTML = "";
+
+      if (history.length > 0) {
+        history.forEach(entry => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="border p-2">${entry.disease}</td>
+            <td class="border p-2">${entry.doctor}</td>
+            <td class="border p-2">${entry.medicine}</td>
+          `;
+          tbody.appendChild(row);
+        });
+        table.classList.remove("hidden");
+      } else {
+        table.classList.add("hidden");
+        alert("No history found for this email.");
+      }
+    });
+  </script>
+</body>
+</html>
