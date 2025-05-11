@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Doctor Appointments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
+    <div class="text-lg font-semibold">View Appointments</div>
+    <a href="../dashboard/doctor.html" class="bg-gray-300 text-[#2c3e50] px-4 py-2 rounded hover:bg-gray-400">Back</a>
+  </nav>
+
+  <!-- Appointment Table -->
+  <div class="p-6 max-w-5xl mx-auto w-full">
+    <h2 class="text-xl font-bold mb-4">Appointments</h2>
+    <table class="w-full bg-white rounded shadow-md border border-gray-300 table-auto">
+      <thead class="bg-[#2c3e50] text-white">
+        <tr>
+          <th class="border px-4 py-2 text-left">Patient Name</th>
+          <th class="border px-4 py-2 text-left">Patient Email</th>
+          <th class="border px-4 py-2 text-left">Date</th>
+          <th class="border px-4 py-2 text-left">Time</th>
+        </tr>
+      </thead>
+      <tbody id="appointmentsBody" class="text-gray-700"></tbody>
+    </table>
+  </div>
+
+  <!-- Script to show appointments -->
+  <script>
+    // Dummy login and data setup (for testing only)
+    localStorage.setItem("currentUser", JSON.stringify({
+      name: "Dr. Alice",
+      email: "alice@hospital.com",
+      role: "doctor"
+    }));
+
+    const dummyAppointments = [
+      {
+        patientName: "John Doe",
+        patientEmail: "john@example.com",
+        doctorEmail: "alice@hospital.com",
+        date: "2025-05-11",
+        time: "10:00"
+      },
+      {
+        patientName: "Jane Smith",
+        patientEmail: "jane@example.com",
+        doctorEmail: "alice@hospital.com",
+        date: "2025-05-12",
+        time: "14:30"
+      },
+      {
+        patientName: "Bob Johnson",
+        patientEmail: "bob@example.com",
+        doctorEmail: "alice@hospital.com",
+        date: "2025-05-13",
+        time: "09:00"
+      }
+    ];
+
+    localStorage.setItem("appointments", JSON.stringify(dummyAppointments));
+  </script>
+
+  <script>
+    function showDoctorAppointments() {
+      const doctor = JSON.parse(localStorage.getItem("currentUser"));
+      const appointments = JSON.parse(localStorage.getItem("appointments")) || [];
+
+      const doctorAppointments = appointments.filter(app => app.doctorEmail === doctor.email);
+      const tbody = document.getElementById("appointmentsBody");
+      tbody.innerHTML = "";
+
+      if (doctorAppointments.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No appointments found.</td></tr>`;
+        return;
+      }
+
+      doctorAppointments.forEach(app => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="border px-4 py-2">${app.patientName}</td>
+          <td class="border px-4 py-2">${app.patientEmail}</td>
+          <td class="border px-4 py-2">${app.date}</td>
+          <td class="border px-4 py-2">${app.time}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Load appointments on page load
+    window.onload = showDoctorAppointments;
+  </script>
+
+</body>
+</html>

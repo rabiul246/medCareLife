@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Appointment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
+    <div class="text-lg font-semibold">Book Appointment</div>
+    <a href="patient.html" class="bg-gray-300 text-[#2c3e50] px-4 py-2 rounded hover:bg-gray-400">Back</a>
+  </nav>
+
+  <!-- Search Section -->
+  <div class="p-6 max-w-4xl mx-auto">
+    <input id="specialistInput" type="text" placeholder="Search by Specialist (e.g. Cardiologist)"
+      class="w-full p-3 border border-gray-300 rounded mb-4" />
+    <button onclick="searchDoctors()"
+      class="bg-[#4ca1af] text-white px-6 py-2 rounded hover:bg-[#3a94a1]">Search</button>
+  </div>
+
+  <!-- Doctor Table -->
+  <div id="doctorList" class="p-6 max-w-4xl mx-auto hidden">
+    <table class="w-full table-auto border border-gray-300 bg-white shadow-md rounded-lg">
+      <thead>
+        <tr class="bg-[#2c3e50] text-white">
+          <th class="border px-4 py-2 text-left">Name</th>
+          <th class="border px-4 py-2 text-left">Email</th>
+          <th class="border px-4 py-2 text-left">Specialist</th>
+          <th class="border px-4 py-2 text-left">Action</th>
+        </tr>
+      </thead>
+      <tbody id="doctorTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Appointment Form -->
+  <div id="appointmentForm" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
+      <h2 class="text-xl font-semibold mb-4">Book Appointment</h2>
+      <form id="form">
+        <input type="hidden" id="selectedDoctorEmail" />
+        <div class="mb-3">
+          <label>Date:</label>
+          <input type="date" id="appointmentDate" required class="w-full p-2 border border-gray-300 rounded" />
+        </div>
+        <div class="mb-3">
+          <label>Time:</label>
+          <input type="time" id="appointmentTime" required class="w-full p-2 border border-gray-300 rounded" />
+        </div>
+        <div class="flex justify-end gap-3 mt-4">
+          <button type="button" onclick="closeForm()" class="bg-gray-400 px-4 py-2 rounded text-white">Cancel</button>
+          <button type="submit" class="bg-[#4ca1af] px-4 py-2 rounded text-white hover:bg-[#3a94a1]">Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../js/appointments.js"></script>
+  <script>
+    const doctorTableBody = document.getElementById("doctorTableBody");
+    const doctorList = document.getElementById("doctorList");
+    const appointmentForm = document.getElementById("appointmentForm");
+
+    function searchDoctors() {
+      const specialist = document.getElementById("specialistInput").value.trim().toLowerCase();
+      const doctors = JSON.parse(localStorage.getItem("doctors")) || [];
+
+      const filtered = doctors.filter(d =>
+        d.specialist.toLowerCase().includes(specialist)
+      );
+
+      doctorTableBody.innerHTML = "";
+      if (filtered.length === 0) {
+        doctorTableBody.innerHTML = `<tr><td colspan="4" class="text-center p-4">No doctors found.</td></tr>`;
+        doctorList.classList.remove("hidden");
+        return;
+      }
+
+      filtered.forEach(doc => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="border px-4 py-2">${doc.name}</td>
+          <td class="border px-4 py-2">${doc.email}</td>
+          <td class="border px-4 py-2">${doc.specialist}</td>
+          <td class="border px-4 py-2">
+            <button onclick="openForm('${doc.email}')" class="bg-[#4ca1af] text-white px-3 py-1 rounded hover:bg-[#3a94a1]">Book</button>
+          </td>
+        `;
+        doctorTableBody.appendChild(row);
+      });
+
+      doctorList.classList.remove("hidden");
+    }
+
+    function openForm(doctorEmail) {
+      document.getElementById("selectedDoctorEmail").value = doctorEmail;
+      appointmentForm.classList.remove("hidden");
+    }
+
+    function closeForm() {
+      appointmentForm.classList.add("hidden");
+    }
+
+    document.getElementById("form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const patient = JSON.parse(localStorage.getItem("currentUser"));
+      const doctorEmail = document.getElementById("selectedDoctorEmail").value;
+      const date = document.getElementById("appointmentDate").value;
+      const time = document.getElementById("appointmentTime").value;
+
+      saveAppointment(doctorEmail, date, time, patient.name, patient.email);
+
+      alert("Appointment booked successfully!");
+      closeForm();
+    });
+  </script>
+  <script>
+  // Dummy doctor data
+  const dummyDoctors = [
+    { name: "Dr. Alice Smith", email: "alice@hospital.com", specialist: "Cardiologist" },
+    { name: "Dr. Bob Johnson", email: "bob@hospital.com", specialist: "Dermatologist" },
+    { name: "Dr. Clara Patel", email: "clara@hospital.com", specialist: "Neurologist" }
+  ];
+  localStorage.setItem("doctors", JSON.stringify(dummyDoctors));
+
+  // Dummy logged-in patient
+  const dummyPatient = {
+    name: "John Doe",
+    email: "john@example.com",
+    role: "patient"
+  };
+  localStorage.setItem("currentUser", JSON.stringify(dummyPatient));
+</script>
+
+</body>
+</html>
