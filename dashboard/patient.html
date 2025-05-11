@@ -14,7 +14,7 @@
   <main class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <div id="viewAppointments" class="bg-white p-6 rounded shadow text-[#2c3e50]">📅 Book Appointment</div>
     <div id="view_prescription" class="bg-white p-6 rounded shadow text-[#2c3e50]">📜 View Prescriptions</div>
-    <div class="bg-white p-6 rounded shadow text-[#2c3e50]">👨‍⚕️ Search Doctors</div>
+    <div id="search" class="bg-white p-6 rounded shadow text-[#2c3e50]">👨‍⚕️ Search Doctors</div>
   </main>
 
   <script>
@@ -34,6 +34,9 @@
     });
     document.getElementById("view_prescription").addEventListener("click", () => {
       window.location.href = "view_prescription.html";
+    });
+    document.getElementById("search").addEventListener("click", () => {
+      window.location.href = "appointment.html";
     });
   </script>
 </body>

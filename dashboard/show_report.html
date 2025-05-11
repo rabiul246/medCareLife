@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Report Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .chart-container {
+      position: relative;
+      height: 250px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-8">
+
+  <h1 class="text-3xl font-bold mb-6 text-center">Health Report Summary</h1>
+
+  <!-- Charts Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+    <!-- Pie Chart: Patient Types -->
+    <div class="bg-white p-6 rounded shadow">
+      <h2 class="text-xl font-semibold mb-4">Patient Types (Pie Chart)</h2>
+      <div class="chart-container">
+        <canvas id="patientPieChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Pie Chart: Doctor Types -->
+    <div class="bg-white p-6 rounded shadow">
+      <h2 class="text-xl font-semibold mb-4">Doctor Specialties (Pie Chart)</h2>
+      <div class="chart-container">
+        <canvas id="doctorPieChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Bar Chart: Patient Increase by Type -->
+    <div class="bg-white p-6 rounded shadow col-span-1 md:col-span-2">
+      <h2 class="text-xl font-semibold mb-4">Recent Increase in Patients by Type (Bar Chart)</h2>
+      <div class="chart-container" style="height: 300px;">
+        <canvas id="patientBarChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Chart JS Logic -->
+  <script>
+    const patientTypes = ['Child', 'Adult', 'Senior'];
+    const patientCounts = [30, 50, 20];
+
+    const doctorTypes = ['Cardiologist', 'Dentist', 'Neurologist', 'Pediatrician'];
+    const doctorCounts = [10, 15, 8, 12];
+
+    const recentPatientTypes = ['Child', 'Adult', 'Senior'];
+    const recentGrowth = [5, 12, 3];
+
+    // Patient Pie Chart
+    new Chart(document.getElementById('patientPieChart'), {
+      type: 'pie',
+      data: {
+        labels: patientTypes,
+        datasets: [{
+          data: patientCounts,
+          backgroundColor: ['#4dc9f6', '#f67019', '#f53794'],
+        }]
+      },
+      options: {
+        maintainAspectRatio: false
+      }
+    });
+
+    // Doctor Pie Chart
+    new Chart(document.getElementById('doctorPieChart'), {
+      type: 'pie',
+      data: {
+        labels: doctorTypes,
+        datasets: [{
+          data: doctorCounts,
+          backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0'],
+        }]
+      },
+      options: {
+        maintainAspectRatio: false
+      }
+    });
+
+    // Bar Chart for recent patient increase
+    new Chart(document.getElementById('patientBarChart'), {
+      type: 'bar',
+      data: {
+        labels: recentPatientTypes,
+        datasets: [{
+          label: 'New Patients in Last 30 Days',
+          data: recentGrowth,
+          backgroundColor: '#36a2eb'
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
