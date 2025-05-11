@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>View Prescriptions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
+    <div class="text-lg font-semibold">My Prescriptions</div>
+    <a id="patient" class="bg-gray-300 text-[#2c3e50] px-4 py-2 rounded hover:bg-gray-400">Back</a>
+  </nav>
+
+  <!-- Prescription Table -->
+  <div class="p-6 max-w-6xl mx-auto w-full">
+    <table class="w-full table-auto border border-gray-300 bg-white shadow-md rounded-lg">
+      <thead>
+        <tr class="bg-[#2c3e50] text-white">
+          <th class="border px-4 py-2">Doctor Name</th>
+          <th class="border px-4 py-2">Disease</th>
+          <th class="border px-4 py-2">Date</th>
+          <th class="border px-4 py-2">Prescription</th>
+        </tr>
+      </thead>
+      <tbody id="prescriptionBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Script with dummy data -->
+  <script>
+    // Dummy prescriptions
+    const dummyPrescriptions = [
+      {
+        patientEmail: "rahim@example.com",
+        doctorName: "Dr. Alice",
+        disease: "Flu",
+        date: "2025-05-05",
+        fileUrl: "prescriptions/prescription1.pdf"
+      },
+      {
+        patientEmail: "rahim@example.com",
+        doctorName: "Dr. John",
+        disease: "Diabetes",
+        date: "2025-04-20",
+        fileUrl: "prescriptions/prescription2.pdf"
+      },
+      {
+        patientEmail: "karim@example.com",
+        doctorName: "Dr. Alice",
+        disease: "Hypertension",
+        date: "2025-03-28",
+        fileUrl: "prescriptions/prescription3.pdf"
+      }
+    ];
+
+    // Set dummy user (rahim@example.com)
+    const currentUser = {
+      name: "Rahim Uddin",
+      email: "rahim@example.com"
+    };
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+    // Optionally save dummy data to localStorage
+    localStorage.setItem("prescriptions", JSON.stringify(dummyPrescriptions));
+
+    function showPrescriptions() {
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+      const prescriptions = JSON.parse(localStorage.getItem("prescriptions")) || [];
+      const tbody = document.getElementById("prescriptionBody");
+
+      const userPrescriptions = prescriptions.filter(p => p.patientEmail === user.email);
+
+      if (userPrescriptions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center p-4">No prescriptions found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = "";
+      userPrescriptions.forEach(pres => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="border px-4 py-2">${pres.doctorName}</td>
+          <td class="border px-4 py-2">${pres.disease}</td>
+          <td class="border px-4 py-2">${pres.date}</td>
+          <td class="border px-4 py-2">
+            <a href="${pres.fileUrl}" download class="bg-[#4ca1af] text-white px-4 py-2 rounded hover:bg-[#3a94a1]">Download</a>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    showPrescriptions();
+
+    document.getElementById("patient").addEventListener("click", () => {
+      window.location.href = "view_appointments.html";
+    });
+  </script>
+
+</body>
+</html>
